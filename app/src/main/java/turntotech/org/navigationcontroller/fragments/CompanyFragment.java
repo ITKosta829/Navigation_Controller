@@ -40,11 +40,8 @@ public class CompanyFragment extends ListFragment {
         title.setText(R.string.watch_list);
 
         String[] companies = new String[] { "Apple", "Microsoft", "Samsung", "Sony" };
-
         int[] icons = { R.drawable.apple_logo, R.drawable.microsoft_logo, R.drawable.samsung_logo, R.drawable.sony_logo };
 
-
-        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, companies);
         setListAdapter(new CustomListAdapter(getActivity(), companies, icons));
 
         return inflater.inflate(R.layout.fragment_list, container, false);
@@ -55,24 +52,18 @@ public class CompanyFragment extends ListFragment {
         // TODO Auto-generated method stub
         super.onListItemClick(l, v, position, id);
 
-        //TextView title = (TextView)v.findViewById(android.R.id.text1);
-        String s = (String) ((TextView)v.findViewById(R.id.txtStatus)).getText();
+        String companyTitle = (String) ((TextView)v.findViewById(R.id.txtStatus)).getText();
 
         Bundle bundle = new Bundle();
         bundle.putInt("CompanyIndex", position);
-        //bundle.putString("CompanyTitle", title.getText().toString());
-        bundle.putString("CompanyTitle", s);
+        bundle.putString("CompanyTitle", companyTitle);
 
         productFragment.setArguments(bundle);
-
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
         transaction.replace(R.id.fragment_container, productFragment);
         transaction.commit();
-
-
-
     }
 
 

@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,11 +17,15 @@ import turntotech.org.navigationcontroller.R;
 
 public class ProductFragment extends ListFragment {
 
-    ProductFragment productFragment;
+    WebViewFragment webViewFragment;
 
     public ProductFragment() {
-        // Required empty public constructor
+        webViewFragment = new WebViewFragment();
     }
+
+    int companyPosition;
+    String companyTitle;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,12 +44,11 @@ public class ProductFragment extends ListFragment {
         actionBar.setCustomView(mCustomView);
         actionBar.setDisplayShowCustomEnabled(true);
 
-
         Bundle bundle = this.getArguments();
-        int companyPosition = bundle.getInt("CompanyIndex");
-        title.setText(bundle.getString("CompanyTitle") + " Products");
 
-
+        companyPosition = bundle.getInt("CompanyIndex");
+        companyTitle = bundle.getString("CompanyTitle");
+        title.setText(companyTitle + " Products");
 
         String[] products = null;
         int[] icons = null;
@@ -82,28 +84,30 @@ public class ProductFragment extends ListFragment {
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
-//    @Override
-//    public void onListItemClick(ListView l, View v, int position, long id) {
-//        // TODO Auto-generated method stub
-//        super.onListItemClick(l, v, position, id);
-//
-//        TextView title = (TextView)v.findViewById(android.R.id.text1);
-//
-//        Bundle bundle = new Bundle();
-//        bundle.putInt("CompanyIndex", position);
-//        bundle.putString("CompanyTitle", title.getText().toString());
-//
-//        productFragment.setArguments(bundle);
-//
-//
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        transaction.addToBackStack(null);
-//        transaction.replace(R.id.fragment_container, productFragment);
-//        transaction.commit();
-//
-//
-//
-//    }
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        // TODO Auto-generated method stub
+        super.onListItemClick(l, v, position, id);
+
+        String productTitle = (String) ((TextView)v.findViewById(R.id.txtStatus)).getText();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("CompanyIndex", companyPosition);
+        bundle.putInt("ProductIndex", position);
+        bundle.putString("CompanyTitle", companyTitle);
+        bundle.putString("ProductTitle", productTitle);
+
+        webViewFragment.setArguments(bundle);
+
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(R.id.fragment_container, webViewFragment);
+        transaction.commit();
+
+
+
+    }
 
 
 
