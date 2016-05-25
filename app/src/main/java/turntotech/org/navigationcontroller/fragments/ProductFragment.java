@@ -60,15 +60,15 @@ public class ProductFragment extends ListFragment {
         }
 
         if(companyPosition == 1){
-            products = new String[] { "Surface", "X-Box", "Windows", "Office", "Smart-Phone" };
-            icons = new int[] {R.drawable.microsoft_surface, R.drawable.x_box, R.drawable.ms_windows,
+            products = new String[] { "Surface", "X-Box", "Windows", "Office", "Smart Phone" };
+            icons = new int[] {R.drawable.ms_surface, R.drawable.x_box, R.drawable.microsoft_logo,
                     R.drawable.ms_office, R.drawable.ms_phone };
         }
 
         if(companyPosition == 2){
             products = new String[] { "Galaxy Note", "Galaxy Tab", "Galaxy Gear", "TV", "Home Appliances" };
             icons = new int[] {R.drawable.galaxy_note, R.drawable.galaxy_tab, R.drawable.galaxy_gear,
-                    R.drawable.samsung_tv_logo, R.drawable.samsung_logo };
+                    R.drawable.samsung_tv, R.drawable.samsung_logo };
         }
 
         if(companyPosition == 3){
