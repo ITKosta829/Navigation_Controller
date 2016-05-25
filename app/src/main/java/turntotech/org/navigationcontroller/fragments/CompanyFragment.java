@@ -37,7 +37,7 @@ public class CompanyFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View mCustomView = inflater.inflate(R.layout.custom_actionbar, null);
-        TextView title = (TextView)mCustomView.findViewById(R.id.title_text);
+        TextView title = (TextView) mCustomView.findViewById(R.id.title_text);
         mCustomView.findViewById(R.id.back_text).setVisibility(View.INVISIBLE);
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -45,13 +45,13 @@ public class CompanyFragment extends ListFragment {
         actionBar.setDisplayShowCustomEnabled(true);
         title.setText(R.string.watch_list);
 
-        String[] companies = new String[] { "Apple", "Microsoft", "Samsung", "Sony" };
-        int[] icons = { R.drawable.apple_logo, R.drawable.microsoft_logo, R.drawable.samsung_logo, R.drawable.sony_logo };
+        String[] companies = new String[]{"Apple", "Microsoft", "Samsung", "Sony"};
+        int[] icons = {R.drawable.apple_logo, R.drawable.microsoft_logo, R.drawable.samsung_logo, R.drawable.sony_logo};
 
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        ListView listView =  (ListView) view.findViewById(android.R.id.list);
+        ListView listView = (ListView) view.findViewById(android.R.id.list);
 
         setListAdapter(new CustomListAdapter(getActivity(), companies, icons));
 
@@ -60,7 +60,7 @@ public class CompanyFragment extends ListFragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                companyTitle = (String) ((TextView)view.findViewById(R.id.txtStatus)).getText();
+                companyTitle = (String) ((TextView) view.findViewById(R.id.txtStatus)).getText();
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
                 adb.setTitle("Delete?");
@@ -72,7 +72,8 @@ public class CompanyFragment extends ListFragment {
                         //data.remove(positionToRemove);
 //                        getListAdapter().notifyDataSetChanged();
 //                        getListAdapter()
-                    }});
+                    }
+                });
                 adb.show();
 
                 Toast.makeText(getActivity(), "List item was long pressed. " + position, Toast.LENGTH_SHORT).show();
@@ -90,7 +91,7 @@ public class CompanyFragment extends ListFragment {
         // TODO Auto-generated method stub
         super.onListItemClick(l, v, position, id);
 
-        companyTitle = (String) ((TextView)v.findViewById(R.id.txtStatus)).getText();
+        companyTitle = (String) ((TextView) v.findViewById(R.id.txtStatus)).getText();
 
         Bundle bundle = new Bundle();
         bundle.putInt("CompanyIndex", position);

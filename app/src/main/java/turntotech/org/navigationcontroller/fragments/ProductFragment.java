@@ -34,7 +34,7 @@ public class ProductFragment extends ListFragment {
 
 
         View mCustomView = inflater.inflate(R.layout.custom_actionbar, null);
-        TextView title = (TextView)mCustomView.findViewById(R.id.title_text);
+        TextView title = (TextView) mCustomView.findViewById(R.id.title_text);
         mCustomView.findViewById(R.id.back_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,28 +55,28 @@ public class ProductFragment extends ListFragment {
         String[] products = null;
         int[] icons = null;
 
-        if(Objects.equals(companyTitle, "Apple")){
-            products = new String[] { "iPhone", "iPad", "iPod", "iMac", "Mac Book", "Watch" };
-            icons = new int[] {R.drawable.i_phone, R.drawable.i_pad, R.drawable.i_pod,
-                    R.drawable.i_mac, R.drawable.macbook, R.drawable.apple_watch };
+        if (Objects.equals(companyTitle, "Apple")) {
+            products = new String[]{"iPhone", "iPad", "iPod", "iMac", "Mac Book", "Watch"};
+            icons = new int[]{R.drawable.i_phone, R.drawable.i_pad, R.drawable.i_pod,
+                    R.drawable.i_mac, R.drawable.macbook, R.drawable.apple_watch};
         }
 
-        if(Objects.equals(companyTitle, "Microsoft")){
-            products = new String[] { "Surface", "X-Box", "Windows", "Office", "Smart Phone" };
-            icons = new int[] {R.drawable.ms_surface, R.drawable.x_box, R.drawable.microsoft_logo,
-                    R.drawable.ms_office, R.drawable.ms_phone };
+        if (Objects.equals(companyTitle, "Microsoft")) {
+            products = new String[]{"Surface", "X-Box", "Windows", "Office", "Smart Phone"};
+            icons = new int[]{R.drawable.ms_surface, R.drawable.x_box, R.drawable.microsoft_logo,
+                    R.drawable.ms_office, R.drawable.ms_phone};
         }
 
-        if(Objects.equals(companyTitle, "Samsung")){
-            products = new String[] { "Galaxy Note", "Galaxy Tab", "Galaxy Gear", "TV", "Home Appliances" };
-            icons = new int[] {R.drawable.galaxy_note, R.drawable.galaxy_tab, R.drawable.galaxy_gear,
-                    R.drawable.samsung_tv, R.drawable.samsung_logo };
+        if (Objects.equals(companyTitle, "Samsung")) {
+            products = new String[]{"Galaxy Note", "Galaxy Tab", "Galaxy Gear", "TV", "Home Appliances"};
+            icons = new int[]{R.drawable.galaxy_note, R.drawable.galaxy_tab, R.drawable.galaxy_gear,
+                    R.drawable.samsung_tv, R.drawable.samsung_logo};
         }
 
-        if(Objects.equals(companyTitle, "Sony")){
-            products = new String[] { "Playstation", "Camera", "Audio", "TV", "Mobile Devices" };
-            icons = new int[] {R.drawable.sony_playstation, R.drawable.sony_camera, R.drawable.sony_logo,
-                    R.drawable.sony_logo, R.drawable.sony_mobile };
+        if (Objects.equals(companyTitle, "Sony")) {
+            products = new String[]{"Playstation", "Camera", "Audio", "TV", "Mobile Devices"};
+            icons = new int[]{R.drawable.sony_playstation, R.drawable.sony_camera, R.drawable.sony_logo,
+                    R.drawable.sony_logo, R.drawable.sony_mobile};
         }
 
         setListAdapter(new CustomListAdapter(getActivity(), products, icons));
@@ -89,7 +89,7 @@ public class ProductFragment extends ListFragment {
         // TODO Auto-generated method stub
         super.onListItemClick(l, v, position, id);
 
-        String productTitle = (String) ((TextView)v.findViewById(R.id.txtStatus)).getText();
+        String productTitle = (String) ((TextView) v.findViewById(R.id.txtStatus)).getText();
 
         Bundle bundle = new Bundle();
         bundle.putInt("CompanyIndex", companyPosition);
@@ -106,9 +106,7 @@ public class ProductFragment extends ListFragment {
         transaction.commit();
 
 
-
     }
-
 
 
 }
