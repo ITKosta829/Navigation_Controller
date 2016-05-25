@@ -90,7 +90,6 @@ public class CompanyFragment extends ListFragment {
         // TODO Auto-generated method stub
         super.onListItemClick(l, v, position, id);
 
-        String companyTitle;
         companyTitle = (String) ((TextView)v.findViewById(R.id.txtStatus)).getText();
 
         Bundle bundle = new Bundle();
