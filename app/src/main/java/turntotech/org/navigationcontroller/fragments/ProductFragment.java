@@ -1,15 +1,19 @@
 package turntotech.org.navigationcontroller.fragments;
 
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -27,6 +31,7 @@ public class ProductFragment extends ListFragment {
 
     int companyPosition;
     String companyTitle;
+    String productTitle;
 
 
     @Override
@@ -79,9 +84,40 @@ public class ProductFragment extends ListFragment {
                     R.drawable.sony_logo, R.drawable.sony_mobile};
         }
 
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
+
+        ListView listView = (ListView) view.findViewById(android.R.id.list);
+
         setListAdapter(new CustomListAdapter(getActivity(), products, icons));
 
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                productTitle = (String) ((TextView) view.findViewById(R.id.txtStatus)).getText();
+
+                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                adb.setTitle("Delete?");
+                adb.setMessage("Are you sure you want to delete " + productTitle + " from the list?");
+                final int positionToRemove = position;
+                adb.setNegativeButton("Cancel", null);
+                adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //data.remove(positionToRemove);
+//                        getListAdapter().notifyDataSetChanged();
+//                        getListAdapter()
+                    }
+                });
+                adb.show();
+
+                Toast.makeText(getActivity(), "List item was long pressed. " + position, Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -89,7 +125,8 @@ public class ProductFragment extends ListFragment {
         // TODO Auto-generated method stub
         super.onListItemClick(l, v, position, id);
 
-        String productTitle = (String) ((TextView) v.findViewById(R.id.txtStatus)).getText();
+
+        productTitle = (String) ((TextView) v.findViewById(R.id.txtStatus)).getText();
 
         Bundle bundle = new Bundle();
         bundle.putInt("CompanyIndex", companyPosition);
