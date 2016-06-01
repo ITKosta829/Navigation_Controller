@@ -19,6 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import turntotech.org.navigationcontroller.CustomListAdapter;
 import turntotech.org.navigationcontroller.R;
 
@@ -26,8 +30,9 @@ import turntotech.org.navigationcontroller.R;
 public class CompanyFragment extends ListFragment {
 
     ProductFragment productFragment;
-
     String companyTitle;
+    String[] companies;
+    Integer[] icons;
 
     public CompanyFragment() {
         productFragment = new ProductFragment();
@@ -45,9 +50,19 @@ public class CompanyFragment extends ListFragment {
         actionBar.setDisplayShowCustomEnabled(true);
         title.setText(R.string.watch_list);
 
-        String[] companies = new String[]{"Apple", "Microsoft", "Samsung", "Sony"};
-        int[] icons = {R.drawable.apple_logo, R.drawable.microsoft_logo, R.drawable.samsung_logo, R.drawable.sony_logo};
+        if (companies == null) {
+            companies = new String[]{"Apple", "Microsoft", "Samsung", "Sony"};
+            icons = new Integer[]{R.drawable.apple_logo, R.drawable.microsoft_logo, R.drawable.samsung_logo, R.drawable.sony_logo};
+        }
 
+        final List<String> CL = new ArrayList<>();
+        final List<Integer> IL = new ArrayList<>();
+
+        Collections.addAll(CL, companies);
+        Collections.addAll(IL, icons);
+
+        companies = CL.toArray(new String[CL.size()]);
+        icons = IL.toArray(new Integer[IL.size()]);
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
@@ -58,20 +73,23 @@ public class CompanyFragment extends ListFragment {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 companyTitle = (String) ((TextView) view.findViewById(R.id.txtStatus)).getText();
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
                 adb.setTitle("Delete?");
                 adb.setMessage("Are you sure you want to delete " + companyTitle + " from the list?");
-                final int positionToRemove = position;
+                //final int positionToRemove = position;
                 adb.setNegativeButton("Cancel", null);
                 adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //data.remove(positionToRemove);
-//                        getListAdapter().notifyDataSetChanged();
-//                        getListAdapter()
+                        CL.remove(position);
+                        IL.remove(position);
+                        companies = CL.toArray(new String[CL.size()]);
+                        icons = IL.toArray(new Integer[IL.size()]);
+                        setListAdapter(new CustomListAdapter(getActivity(), companies, icons));
+
                     }
                 });
                 adb.show();

@@ -15,9 +15,9 @@ public class CustomListAdapter extends ArrayAdapter<String> {
 
 	private final Context context;
 	private final String[] values;
-	private final int[] icons;
+	private final Integer[] icons;
 
-	public CustomListAdapter(Context context, String[] values, int[] icons) {
+	public CustomListAdapter(Context context, String[] values, Integer[] icons) {
 		super(context, R.layout.row_layout, values);
 		this.context = context;
 		this.values = values;
