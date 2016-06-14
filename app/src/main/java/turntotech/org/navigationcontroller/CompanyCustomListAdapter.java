@@ -11,18 +11,33 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class CustomListAdapter extends ArrayAdapter<String> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class CompanyCustomListAdapter extends ArrayAdapter<String> {
 
 	private final Context context;
-	private final String[] values;
-	private final Integer[] icons;
+//	private final String[] values;
+//	private final Integer[] icons;
+	private  List<Company> companyList;
 
-	public CustomListAdapter(Context context, String[] values, Integer[] icons) {
+	public CompanyCustomListAdapter(Context context, String[] values, Integer[] icons) {
 		super(context, R.layout.row_layout, values);
 		this.context = context;
-		this.values = values;
-		this.icons = icons;
+//		this.values = values;
+//		this.icons = icons;
+		//this.companyList = companyList;
+
 	}
+	public CompanyCustomListAdapter(Context context, List companyList) {
+		super(context, R.layout.row_layout, companyList);
+		this.context = context;
+//		this.values = values;
+//		this.icons = icons;
+		this.companyList = companyList;
+
+	}
+
 
 	@Override
 	// Get a View that displays the data at the specified position in the data set.
@@ -45,8 +60,8 @@ public class CustomListAdapter extends ArrayAdapter<String> {
 		TextView textView = (TextView) rowView.findViewById(R.id.txtStatus);
 		textView.setTextSize(20);
 		textView.setTypeface(null, Typeface.BOLD);
-		textView.setText(values[position]);
-		Drawable draw = context.getResources().getDrawable(icons[position]);
+		textView.setText(this.companyList.get(position).getCompanyName());
+		Drawable draw = context.getResources().getDrawable(this.companyList.get(position).getCompanyIcon());
 		Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
 		int h = bitmap.getHeight();
 		int w = bitmap.getWidth();

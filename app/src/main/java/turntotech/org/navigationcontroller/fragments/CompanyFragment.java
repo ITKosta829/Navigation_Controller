@@ -5,25 +5,23 @@ import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import turntotech.org.navigationcontroller.CustomListAdapter;
+import turntotech.org.navigationcontroller.Company;
+import turntotech.org.navigationcontroller.CompanyCustomListAdapter;
+import turntotech.org.navigationcontroller.DataHandler;
 import turntotech.org.navigationcontroller.R;
 
 
@@ -31,8 +29,6 @@ public class CompanyFragment extends ListFragment {
 
     ProductFragment productFragment;
     String companyTitle;
-    String[] companies;
-    Integer[] icons;
 
     public CompanyFragment() {
         productFragment = new ProductFragment();
@@ -50,25 +46,18 @@ public class CompanyFragment extends ListFragment {
         actionBar.setDisplayShowCustomEnabled(true);
         title.setText(R.string.watch_list);
 
-        if (companies == null) {
-            companies = new String[]{"Apple", "Microsoft", "Samsung", "Sony"};
-            icons = new Integer[]{R.drawable.apple_logo, R.drawable.microsoft_logo, R.drawable.samsung_logo, R.drawable.sony_logo};
+        if (DataHandler.getInstance().getAllCompanies().isEmpty()) {
+            DataHandler.getInstance().addCompany("Apple", R.drawable.apple_logo);
+            DataHandler.getInstance().addCompany("Microsoft", R.drawable.microsoft_logo);
+            DataHandler.getInstance().addCompany("Samsung", R.drawable.samsung_logo);
+            DataHandler.getInstance().addCompany("Sony", R.drawable.sony_logo);
         }
-
-        final List<String> CL = new ArrayList<>();
-        final List<Integer> IL = new ArrayList<>();
-
-        Collections.addAll(CL, companies);
-        Collections.addAll(IL, icons);
-
-        companies = CL.toArray(new String[CL.size()]);
-        icons = IL.toArray(new Integer[IL.size()]);
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         ListView listView = (ListView) view.findViewById(android.R.id.list);
 
-        setListAdapter(new CustomListAdapter(getActivity(), companies, icons));
+        setListAdapter(new CompanyCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies()));
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
@@ -80,26 +69,21 @@ public class CompanyFragment extends ListFragment {
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
                 adb.setTitle("Delete?");
                 adb.setMessage("Are you sure you want to delete " + companyTitle + " from the list?");
-                //final int positionToRemove = position;
                 adb.setNegativeButton("Cancel", null);
                 adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        CL.remove(position);
-                        IL.remove(position);
-                        companies = CL.toArray(new String[CL.size()]);
-                        icons = IL.toArray(new Integer[IL.size()]);
-                        setListAdapter(new CustomListAdapter(getActivity(), companies, icons));
+
+                        DataHandler.getInstance().deleteCompany(position);
+
+                        setListAdapter(new CompanyCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies()));
 
                     }
                 });
                 adb.show();
 
-                Toast.makeText(getActivity(), "List item was long pressed. " + position, Toast.LENGTH_SHORT).show();
-
                 return true;
             }
         });
-
 
         return view;
     }
@@ -122,6 +106,5 @@ public class CompanyFragment extends ListFragment {
         transaction.replace(R.id.fragment_container, productFragment);
         transaction.commit();
     }
-
 
 }
