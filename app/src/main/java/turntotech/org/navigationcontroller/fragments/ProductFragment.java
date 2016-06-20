@@ -1,6 +1,7 @@
 package turntotech.org.navigationcontroller.fragments;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.DialogInterface;
@@ -27,9 +28,11 @@ import turntotech.org.navigationcontroller.R;
 public class ProductFragment extends ListFragment {
 
     WebViewFragment webViewFragment;
+    AddProductForm addProductForm;
 
     public ProductFragment() {
         webViewFragment = new WebViewFragment();
+        addProductForm = new AddProductForm();
     }
 
     int companyPosition;
@@ -38,15 +41,31 @@ public class ProductFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        Bundle bundle = this.getArguments();
+        companyPosition = DataHandler.getInstance().currentCompanyPosition;
+        companyTitle = bundle.getString("CompanyTitle");
 
         View mCustomView = inflater.inflate(R.layout.custom_actionbar, null);
-
-
         TextView title = (TextView) mCustomView.findViewById(R.id.title_text);
+        title.setText(companyTitle + " Products");
         mCustomView.findViewById(R.id.back_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getFragmentManager().popBackStackImmediate();
+            }
+        });
+        mCustomView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentManager fm = getActivity().getFragmentManager();
+                AddProductForm addProductForm = new AddProductForm();
+                Bundle bundle = new Bundle();
+                bundle.putInt("CompanyIndex", companyPosition);
+                bundle.putString("CompanyTitle", companyTitle);
+                addProductForm.setArguments(bundle);
+                addProductForm.show(fm,"Add Product");
+
             }
         });
 
@@ -54,72 +73,12 @@ public class ProductFragment extends ListFragment {
         actionBar.setCustomView(mCustomView);
         actionBar.setDisplayShowCustomEnabled(true);
 
-        Bundle bundle = this.getArguments();
 
-        companyPosition = bundle.getInt("CompanyIndex");
-        companyTitle = bundle.getString("CompanyTitle");
-        title.setText(companyTitle + " Products");
-
-        if (Objects.equals(companyTitle, "Apple")) {
-            if (DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts().isEmpty()) {
-
-                DataHandler.getInstance().addProduct(companyPosition, "iPhone", R.drawable.i_phone);
-                DataHandler.getInstance().addProduct(companyPosition, "iPad", R.drawable.i_pad);
-                DataHandler.getInstance().addProduct(companyPosition, "iPod", R.drawable.i_pod);
-                DataHandler.getInstance().addProduct(companyPosition, "iMac", R.drawable.i_mac);
-                DataHandler.getInstance().addProduct(companyPosition, "Mac Book", R.drawable.macbook);
-                DataHandler.getInstance().addProduct(companyPosition, "Watch", R.drawable.apple_watch);
-
-            }
-        }
-
-        if (Objects.equals(companyTitle, "Microsoft")) {
-            if (DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts().isEmpty()) {
-
-                DataHandler.getInstance().addProduct(companyPosition, "Surface", R.drawable.ms_surface);
-                DataHandler.getInstance().addProduct(companyPosition, "X-Box", R.drawable.x_box);
-                DataHandler.getInstance().addProduct(companyPosition, "Windows", R.drawable.microsoft_logo);
-                DataHandler.getInstance().addProduct(companyPosition, "Office", R.drawable.ms_office);
-                DataHandler.getInstance().addProduct(companyPosition, "Smart Phone", R.drawable.ms_phone);
-
-            }
-        }
-
-        if (Objects.equals(companyTitle, "Samsung")) {
-            if (DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts().isEmpty()) {
-
-                DataHandler.getInstance().addProduct(companyPosition, "Galaxy Note", R.drawable.galaxy_note);
-                DataHandler.getInstance().addProduct(companyPosition, "Galaxy Tab", R.drawable.galaxy_tab);
-                DataHandler.getInstance().addProduct(companyPosition, "Galaxy Gear", R.drawable.galaxy_gear);
-                DataHandler.getInstance().addProduct(companyPosition, "TV", R.drawable.samsung_tv);
-                DataHandler.getInstance().addProduct(companyPosition, "Home Appliances", R.drawable.samsung_logo);
-
-            }
-        }
-
-        if (Objects.equals(companyTitle, "Sony")) {
-            if (DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts().isEmpty()) {
-
-                DataHandler.getInstance().addProduct(companyPosition, "Playstation", R.drawable.sony_playstation);
-                DataHandler.getInstance().addProduct(companyPosition, "Camera", R.drawable.sony_camera);
-                DataHandler.getInstance().addProduct(companyPosition, "Audio", R.drawable.sony_logo);
-                DataHandler.getInstance().addProduct(companyPosition, "TV", R.drawable.sony_logo);
-                DataHandler.getInstance().addProduct(companyPosition, "Mobile Devices", R.drawable.sony_mobile);
-
-            }
-        }
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ListView listView = (ListView) view.findViewById(android.R.id.list);
 
-        if (Objects.equals(companyTitle, "Apple"))
-            setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
-        if (Objects.equals(companyTitle, "Microsoft"))
-            setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
-        if (Objects.equals(companyTitle, "Samsung"))
-            setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
-        if (Objects.equals(companyTitle, "Sony"))
-            setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
+        setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
@@ -137,14 +96,7 @@ public class ProductFragment extends ListFragment {
 
                         DataHandler.getInstance().getAllCompanies().get(companyPosition).deleteProduct(position);
 
-                        if (Objects.equals(companyTitle, "Apple"))
-                            setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
-                        if (Objects.equals(companyTitle, "Microsoft"))
-                            setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
-                        if (Objects.equals(companyTitle, "Samsung"))
-                            setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
-                        if (Objects.equals(companyTitle, "Sony"))
-                            setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
+                        setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
 
                     }
                 });

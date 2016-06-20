@@ -1,11 +1,11 @@
 package turntotech.org.navigationcontroller.fragments;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -15,11 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import turntotech.org.navigationcontroller.Company;
 import turntotech.org.navigationcontroller.CompanyCustomListAdapter;
 import turntotech.org.navigationcontroller.DataHandler;
 import turntotech.org.navigationcontroller.R;
@@ -29,9 +24,11 @@ public class CompanyFragment extends ListFragment {
 
     ProductFragment productFragment;
     String companyTitle;
+    AddCompanyForm addCompanyForm;
 
     public CompanyFragment() {
         productFragment = new ProductFragment();
+        addCompanyForm = new AddCompanyForm();
     }
 
     @Override
@@ -40,6 +37,16 @@ public class CompanyFragment extends ListFragment {
         View mCustomView = inflater.inflate(R.layout.custom_actionbar, null);
         TextView title = (TextView) mCustomView.findViewById(R.id.title_text);
         mCustomView.findViewById(R.id.back_text).setVisibility(View.INVISIBLE);
+        mCustomView.findViewById(R.id.addButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentManager fm = getActivity().getFragmentManager();
+                AddCompanyForm addCompanyForm = new AddCompanyForm();
+                addCompanyForm.show(fm,"Add Company");
+
+            }
+        });
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         actionBar.setCustomView(mCustomView);
@@ -47,10 +54,7 @@ public class CompanyFragment extends ListFragment {
         title.setText(R.string.watch_list);
 
         if (DataHandler.getInstance().getAllCompanies().isEmpty()) {
-            DataHandler.getInstance().addCompany("Apple", R.drawable.apple_logo);
-            DataHandler.getInstance().addCompany("Microsoft", R.drawable.microsoft_logo);
-            DataHandler.getInstance().addCompany("Samsung", R.drawable.samsung_logo);
-            DataHandler.getInstance().addCompany("Sony", R.drawable.sony_logo);
+            DataHandler.getInstance().companiesAndProducts();
         }
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
@@ -98,6 +102,8 @@ public class CompanyFragment extends ListFragment {
         Bundle bundle = new Bundle();
         bundle.putInt("CompanyIndex", position);
         bundle.putString("CompanyTitle", companyTitle);
+
+        DataHandler.getInstance().currentCompanyPosition = position;
 
         productFragment.setArguments(bundle);
 

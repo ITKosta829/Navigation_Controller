@@ -7,4 +7,6 @@
     <string name="title">TITLE</string>
     <string name="watch_list">Watch List</string>
     <string name="hello_world">hello_world</string>
+    <string name="enter_company_name">Enter A New Company Name</string>
+    <string name="enter_product_name">Enter A New Product Name</string>
 </resources>
