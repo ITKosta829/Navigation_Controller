@@ -7,6 +7,7 @@ public class Product {
 
     private String productName;
     private Integer productIcon;
+    private String url;
 
     public Product (String name, Integer icon){
         this.productName = name;
@@ -19,6 +20,14 @@ public class Product {
 
     public void setProductName(String name) {
         this.productName = name;
+    }
+
+    public  String getProductURL(){
+        return url;
+    }
+
+    public void setProductURL (String url){
+        this.url = url;
     }
 
     public Integer getProductIcon() {

@@ -8,7 +8,12 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -43,7 +48,7 @@ public class CompanyFragment extends ListFragment {
 
                 FragmentManager fm = getActivity().getFragmentManager();
                 AddCompanyForm addCompanyForm = new AddCompanyForm();
-                addCompanyForm.show(fm,"Add Company");
+                addCompanyForm.show(fm, "Add Company");
 
             }
         });
@@ -63,29 +68,19 @@ public class CompanyFragment extends ListFragment {
 
         setListAdapter(new CompanyCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies()));
 
+        registerForContextMenu(listView);
+
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 companyTitle = (String) ((TextView) view.findViewById(R.id.txtStatus)).getText();
+                DataHandler.getInstance().currentCompanyTitle = companyTitle;
+                DataHandler.getInstance().currentCompanyPosition = position;
+                Log.d("Long Click", "Company Position: " + position);
 
-                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-                adb.setTitle("Delete?");
-                adb.setMessage("Are you sure you want to delete " + companyTitle + " from the list?");
-                adb.setNegativeButton("Cancel", null);
-                adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        DataHandler.getInstance().deleteCompany(position);
-
-                        setListAdapter(new CompanyCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies()));
-
-                    }
-                });
-                adb.show();
-
-                return true;
+                return false;
             }
         });
 
@@ -98,14 +93,8 @@ public class CompanyFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
 
         companyTitle = (String) ((TextView) v.findViewById(R.id.txtStatus)).getText();
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("CompanyIndex", position);
-        bundle.putString("CompanyTitle", companyTitle);
-
+        DataHandler.getInstance().currentCompanyTitle = companyTitle;
         DataHandler.getInstance().currentCompanyPosition = position;
-
-        productFragment.setArguments(bundle);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
@@ -113,4 +102,41 @@ public class CompanyFragment extends ListFragment {
         transaction.commit();
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        menu.add("Edit");
+        menu.add("Delete");
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        String title = (String) item.getTitle();
+
+        if (title.equals("Edit")) {
+
+            FragmentManager fm = getActivity().getFragmentManager();
+            EditCompanyForm editCompanyForm = new EditCompanyForm();
+            editCompanyForm.show(fm, "Edit Company");
+
+        } else if (title.equals("Delete")) {
+
+            AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+            adb.setTitle("Delete?");
+            adb.setMessage("Are you sure you want to delete " + companyTitle + " from the list?");
+            adb.setNegativeButton("Cancel", null);
+            adb.setPositiveButton("Yes", new AlertDialog.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                    DataHandler.getInstance().deleteCompany(DataHandler.getInstance().currentCompanyPosition);
+                    setListAdapter(new CompanyCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies()));
+                }
+            });
+            adb.show();
+        }
+        return true;
+    }
 }

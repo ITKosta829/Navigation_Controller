@@ -29,10 +29,8 @@ public class AddProductForm extends android.app.DialogFragment {
         View v = i.inflate(R.layout.add_form, null);
         et = (EditText) v.findViewById(R.id.add_form_edit_txt);
 
-        Bundle bundle = this.getArguments();
-
-        companyPosition = bundle.getInt("CompanyIndex");
-        companyTitle = bundle.getString("CompanyTitle");
+        companyPosition = DataHandler.getInstance().currentCompanyPosition;
+        companyTitle = DataHandler.getInstance().currentCompanyTitle;
 
         AlertDialog.Builder b;
         b = new AlertDialog.Builder(getActivity());
@@ -55,8 +53,6 @@ public class AddProductForm extends android.app.DialogFragment {
                         }
                 );
 
-
         return b.create();
-
     }
 }

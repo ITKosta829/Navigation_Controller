@@ -9,4 +9,6 @@
     <string name="hello_world">hello_world</string>
     <string name="enter_company_name">Enter A New Company Name</string>
     <string name="enter_product_name">Enter A New Product Name</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_delete">Delete</string>
 </resources>

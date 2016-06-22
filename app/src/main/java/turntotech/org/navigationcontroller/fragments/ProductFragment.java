@@ -8,7 +8,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import turntotech.org.navigationcontroller.CompanyCustomListAdapter;
 import turntotech.org.navigationcontroller.ProductCustomListAdapter;
 import turntotech.org.navigationcontroller.DataHandler;
 import turntotech.org.navigationcontroller.R;
@@ -41,9 +45,8 @@ public class ProductFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Bundle bundle = this.getArguments();
         companyPosition = DataHandler.getInstance().currentCompanyPosition;
-        companyTitle = bundle.getString("CompanyTitle");
+        companyTitle = DataHandler.getInstance().currentCompanyTitle;
 
         View mCustomView = inflater.inflate(R.layout.custom_actionbar, null);
         TextView title = (TextView) mCustomView.findViewById(R.id.title_text);
@@ -60,11 +63,7 @@ public class ProductFragment extends ListFragment {
 
                 FragmentManager fm = getActivity().getFragmentManager();
                 AddProductForm addProductForm = new AddProductForm();
-                Bundle bundle = new Bundle();
-                bundle.putInt("CompanyIndex", companyPosition);
-                bundle.putString("CompanyTitle", companyTitle);
-                addProductForm.setArguments(bundle);
-                addProductForm.show(fm,"Add Product");
+                addProductForm.show(fm, "Add Product");
 
             }
         });
@@ -73,12 +72,12 @@ public class ProductFragment extends ListFragment {
         actionBar.setCustomView(mCustomView);
         actionBar.setDisplayShowCustomEnabled(true);
 
-
-
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ListView listView = (ListView) view.findViewById(android.R.id.list);
 
         setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
+
+        registerForContextMenu(listView);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
@@ -86,23 +85,11 @@ public class ProductFragment extends ListFragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 productTitle = (String) ((TextView) view.findViewById(R.id.txtStatus)).getText();
+                DataHandler.getInstance().currentProductTitle = productTitle;
+                Log.d("Long Click", "Product Position: " + position);
+                DataHandler.getInstance().currentProductPosition = position;
 
-                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-                adb.setTitle("Delete?");
-                adb.setMessage("Are you sure you want to delete " + productTitle + " from the list?");
-                adb.setNegativeButton("Cancel", null);
-                adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        DataHandler.getInstance().getAllCompanies().get(companyPosition).deleteProduct(position);
-
-                        setListAdapter(new ProductCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies().get(companyPosition).getProducts()));
-
-                    }
-                });
-                adb.show();
-
-                return true;
+                return false;
             }
         });
 
@@ -115,19 +102,51 @@ public class ProductFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
 
         productTitle = (String) ((TextView) v.findViewById(R.id.txtStatus)).getText();
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("CompanyIndex", companyPosition);
-        bundle.putInt("ProductIndex", position);
-        bundle.putString("CompanyTitle", companyTitle);
-        bundle.putString("ProductTitle", productTitle);
-
-        webViewFragment.setArguments(bundle);
+        DataHandler.getInstance().currentProductTitle = productTitle;
+        DataHandler.getInstance().currentProductPosition = position;
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
         transaction.replace(R.id.fragment_container, webViewFragment);
         transaction.commit();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        menu.add("Edit");
+        menu.add("Delete");
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        String title = (String) item.getTitle();
+
+        if (title.equals("Edit")) {
+
+            FragmentManager fm = getActivity().getFragmentManager();
+            EditProductForm editProductForm = new EditProductForm();
+            editProductForm.show(fm, "Edit Product");
+
+        } else if (title.equals("Delete")) {
+
+            AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+            adb.setTitle("Delete?");
+            adb.setMessage("Are you sure you want to delete " + productTitle + " from the list?");
+            adb.setNegativeButton("Cancel", null);
+            adb.setPositiveButton("Yes", new AlertDialog.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                    DataHandler.getInstance().getAllCompanies().get(companyPosition).deleteProduct(DataHandler.getInstance().currentProductPosition);
+                    setListAdapter(new CompanyCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies()));
+                }
+            });
+            adb.show();
+        }
+        return true;
     }
 
 
