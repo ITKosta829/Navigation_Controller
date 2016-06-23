@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -61,6 +62,7 @@ public class CompanyFragment extends ListFragment {
         if (DataHandler.getInstance().getAllCompanies().isEmpty()) {
             DataHandler.getInstance().companiesAndProducts();
         }
+        DataHandler.getInstance().financeQuery();
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
@@ -84,6 +86,8 @@ public class CompanyFragment extends ListFragment {
             }
         });
 
+        DataHandler.getInstance().adapter = (ArrayAdapter) getListAdapter();
+
         return view;
     }
 
@@ -98,7 +102,7 @@ public class CompanyFragment extends ListFragment {
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
-        transaction.replace(R.id.fragment_container, productFragment);
+        transaction.replace(R.id.fragment_container, productFragment,"prod");
         transaction.commit();
     }
 

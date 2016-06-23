@@ -17,8 +17,6 @@ import java.util.List;
 public class CompanyCustomListAdapter extends ArrayAdapter<String> {
 
 	private final Context context;
-//	private final String[] values;
-//	private final Integer[] icons;
 	private  List<Company> companyList;
 
 	public CompanyCustomListAdapter(Context context, String[] values, Integer[] icons) {
@@ -32,8 +30,6 @@ public class CompanyCustomListAdapter extends ArrayAdapter<String> {
 	public CompanyCustomListAdapter(Context context, List companyList) {
 		super(context, R.layout.row_layout, companyList);
 		this.context = context;
-//		this.values = values;
-//		this.icons = icons;
 		this.companyList = companyList;
 
 	}
@@ -56,11 +52,15 @@ public class CompanyCustomListAdapter extends ArrayAdapter<String> {
 		 * Inflate a new view hierarchy from the specified xml resource. 
 		 * Throws InflateException if there is an error.
 		 */
-		View rowView = inflater.inflate(R.layout.row_layout, parent, false);
+		View rowView = inflater.inflate(R.layout.company_row_layout, parent, false);
 		TextView textView = (TextView) rowView.findViewById(R.id.txtStatus);
 		textView.setTextSize(20);
 		textView.setTypeface(null, Typeface.BOLD);
 		textView.setText(this.companyList.get(position).getCompanyName());
+		TextView textView2 = (TextView) rowView.findViewById(R.id.stock_price);
+		textView2.setTextSize(20);
+		textView2.setTypeface(null, Typeface.BOLD);
+		textView2.setText("$" + this.companyList.get(position).getCompanyStockPrice());
 		Drawable draw = context.getResources().getDrawable(this.companyList.get(position).getCompanyIcon());
 		Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
 		int h = bitmap.getHeight();

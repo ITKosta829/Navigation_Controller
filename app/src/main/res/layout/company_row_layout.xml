@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="horizontal">
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/txtStatus"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight=".70"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/ic_launcher"
+        android:gravity="start|center_vertical"
+        android:paddingStart="15dp"
+        android:singleLine="true"
+        android:text="@string/hello_world"
+        android:textSize="@dimen/activity_vertical_margin" />
+
+    <TextView
+        android:id="@+id/stock_price"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_weight=".30"
+        android:gravity="center_vertical"
+        android:text="@string/hello_world"
+        android:textSize="@dimen/activity_vertical_margin" />
+
+</LinearLayout>

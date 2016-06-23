@@ -25,7 +25,7 @@ public class EditCompanyForm extends android.app.DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater i = getActivity().getLayoutInflater();
-        View v = i.inflate(R.layout.add_form, null);
+        View v = i.inflate(R.layout.add_product_form, null);
         et = (EditText) v.findViewById(R.id.add_form_edit_txt);
 
         AlertDialog.Builder b;

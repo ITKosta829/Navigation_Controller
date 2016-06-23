@@ -7,8 +7,11 @@
     <string name="title">TITLE</string>
     <string name="watch_list">Watch List</string>
     <string name="hello_world">hello_world</string>
-    <string name="enter_company_name">Enter A New Company Name</string>
-    <string name="enter_product_name">Enter A New Product Name</string>
+    <string name="new_company_form">New Company Form</string>
+    <string name="new_product_form">New Product Form</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_delete">Delete</string>
+    <string name="company_name">Enter Company Name</string>
+    <string name="exchange_name">Enter Exchange Name (ex: NASDAQ)</string>
+    <string name="ticker_symbol">Enter Stock Ticker Symbol (ex: GOOG)</string>
 </resources>
