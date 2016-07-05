@@ -6,10 +6,10 @@ package turntotech.org.navigationcontroller;
 public class Product {
 
     private String productName;
-    private Integer productIcon;
+    private String productIcon;
     private String url;
 
-    public Product (String name, Integer icon){
+    public Product (String name, String icon){
         this.productName = name;
         this.productIcon = icon;
     }
@@ -30,11 +30,11 @@ public class Product {
         this.url = url;
     }
 
-    public Integer getProductIcon() {
+    public String getProductIcon() {
         return productIcon;
     }
 
-    public void setProductIcon(Integer icon) {
+    public void setProductIcon(String icon) {
         this.productIcon = icon;
     }
 

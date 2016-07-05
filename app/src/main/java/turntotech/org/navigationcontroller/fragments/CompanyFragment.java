@@ -5,6 +5,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,14 +25,19 @@ import android.widget.TextView;
 
 import turntotech.org.navigationcontroller.CompanyCustomListAdapter;
 import turntotech.org.navigationcontroller.DataHandler;
+import turntotech.org.navigationcontroller.DatabaseAccess;
 import turntotech.org.navigationcontroller.R;
 
 
 public class CompanyFragment extends ListFragment {
 
+    private static final String TAG_PRODUCT_FRAG = "prod";
+
     ProductFragment productFragment;
     String companyTitle;
     AddCompanyForm addCompanyForm;
+
+    DataHandler dataHandler;
 
     public CompanyFragment() {
         productFragment = new ProductFragment();
@@ -59,16 +66,17 @@ public class CompanyFragment extends ListFragment {
         actionBar.setDisplayShowCustomEnabled(true);
         title.setText(R.string.watch_list);
 
-        if (DataHandler.getInstance().getAllCompanies().isEmpty()) {
-            DataHandler.getInstance().companiesAndProducts();
-        }
-        DataHandler.getInstance().financeQuery();
+
+
+        dataHandler = DataHandler.getInstance();
+
+        dataHandler.financeQuery();
 
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         ListView listView = (ListView) view.findViewById(android.R.id.list);
 
-        setListAdapter(new CompanyCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies()));
+        setListAdapter(new CompanyCustomListAdapter(getActivity(), dataHandler.getAllCompanies()));
 
         registerForContextMenu(listView);
 
@@ -78,15 +86,15 @@ public class CompanyFragment extends ListFragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 companyTitle = (String) ((TextView) view.findViewById(R.id.txtStatus)).getText();
-                DataHandler.getInstance().currentCompanyTitle = companyTitle;
-                DataHandler.getInstance().currentCompanyPosition = position;
+                dataHandler.currentCompanyTitle = companyTitle;
+                dataHandler.currentCompanyPosition = position;
                 Log.d("Long Click", "Company Position: " + position);
 
                 return false;
             }
         });
 
-        DataHandler.getInstance().adapter = (ArrayAdapter) getListAdapter();
+        dataHandler.adapter = (ArrayAdapter) getListAdapter();
 
         return view;
     }
@@ -97,12 +105,12 @@ public class CompanyFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
 
         companyTitle = (String) ((TextView) v.findViewById(R.id.txtStatus)).getText();
-        DataHandler.getInstance().currentCompanyTitle = companyTitle;
-        DataHandler.getInstance().currentCompanyPosition = position;
+        dataHandler.currentCompanyTitle = companyTitle;
+        dataHandler.currentCompanyPosition = position;
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
-        transaction.replace(R.id.fragment_container, productFragment,"prod");
+        transaction.replace(R.id.fragment_container, productFragment,TAG_PRODUCT_FRAG);
         transaction.commit();
     }
 
@@ -135,8 +143,8 @@ public class CompanyFragment extends ListFragment {
             adb.setPositiveButton("Yes", new AlertDialog.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
 
-                    DataHandler.getInstance().deleteCompany(DataHandler.getInstance().currentCompanyPosition);
-                    setListAdapter(new CompanyCustomListAdapter(getActivity(), DataHandler.getInstance().getAllCompanies()));
+                    dataHandler.deleteCompany(dataHandler.currentCompanyPosition);
+                    setListAdapter(new CompanyCustomListAdapter(getActivity(), dataHandler.getAllCompanies()));
                 }
             });
             adb.show();

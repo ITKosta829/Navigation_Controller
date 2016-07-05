@@ -1,6 +1,7 @@
 package turntotech.org.navigationcontroller;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -40,6 +41,14 @@ public class ProductCustomListAdapter extends ArrayAdapter<String> {
 
     }
 
+    public Drawable getImage(String name){
+
+        Resources resources = context.getResources();
+        final int resourceId = resources.getIdentifier(name, "drawable",
+                context.getPackageName());
+        return resources.getDrawable(resourceId);
+    }
+
 
     @Override
     // Get a View that displays the data at the specified position in the data set.
@@ -63,7 +72,8 @@ public class ProductCustomListAdapter extends ArrayAdapter<String> {
         textView.setTextSize(20);
         textView.setTypeface(null, Typeface.BOLD);
         textView.setText(this.productList.get(position).getProductName());
-        Drawable draw = context.getResources().getDrawable(this.productList.get(position).getProductIcon());
+        //Drawable draw = context.getResources().getDrawable(this.productList.get(position).getProductIcon());
+        Drawable draw = getImage(this.productList.get(position).getProductIcon());
         Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
         int h = bitmap.getHeight();
         int w = bitmap.getWidth();

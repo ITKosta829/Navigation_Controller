@@ -9,22 +9,20 @@ import java.util.List;
 public class Company {
 
     private String companyName;
-    private Integer companyIcon;
+    private String companyIcon;
     private String companyStockName;
     private String companyStockPrice;
     private List <Product> productList;
 
-    public Company (String name, Integer icon){
+    public Company (String name, String icon){
         this.companyName = name;
         this.companyIcon = icon;
         this.productList = new ArrayList<>();
     }
 
-    public Company (String name, Integer icon, String stockName){
-        this.companyName = name;
-        this.companyIcon = icon;
+    public Company (String name, String icon, String stockName){
+        this(name, icon);
         this.companyStockName = stockName;
-        this.productList = new ArrayList<>();
     }
 
     public String getCompanyName() {
@@ -51,11 +49,11 @@ public class Company {
         this.companyStockPrice = price;
     }
 
-    public Integer getCompanyIcon() {
+    public String getCompanyIcon() {
         return companyIcon;
     }
 
-    public void setCompanyIcon(Integer icon) {
+    public void setCompanyIcon(String icon) {
         this.companyIcon = icon;
     }
 
@@ -63,7 +61,7 @@ public class Company {
         return productList;
     }
 
-    public void addProducts(String name, Integer logo){
+    public void addProducts(String name, String logo){
         Product product = new Product(name, logo);
         productList.add(product);
     }

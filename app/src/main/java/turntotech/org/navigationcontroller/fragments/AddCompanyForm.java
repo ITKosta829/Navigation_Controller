@@ -47,7 +47,7 @@ public class AddCompanyForm extends android.app.DialogFragment {
                                 ticker_symbol = T.getText().toString();
                                 ticker_symbol = ticker_symbol.toUpperCase();
 
-                                DataHandler.getInstance().addCompany(company_name, R.drawable.unknown_logo, exchange + ":" + ticker_symbol);
+                                DataHandler.getInstance().addCompany(company_name, "unknown_logo", exchange + ":" + ticker_symbol);
                                 DataHandler.getInstance().financeQuery();
                             }
                         }

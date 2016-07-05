@@ -1,6 +1,7 @@
 package turntotech.org.navigationcontroller;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -17,6 +18,8 @@ import java.util.List;
 public class CompanyCustomListAdapter extends ArrayAdapter<String> {
 
 	private final Context context;
+//	private final String[] values;
+//	private final Integer[] icons;
 	private  List<Company> companyList;
 
 	public CompanyCustomListAdapter(Context context, String[] values, Integer[] icons) {
@@ -32,6 +35,14 @@ public class CompanyCustomListAdapter extends ArrayAdapter<String> {
 		this.context = context;
 		this.companyList = companyList;
 
+	}
+
+	public Drawable getImage(String name){
+
+		Resources resources = context.getResources();
+		final int resourceId = resources.getIdentifier(name, "drawable",
+				context.getPackageName());
+		return resources.getDrawable(resourceId);
 	}
 
 
@@ -61,7 +72,8 @@ public class CompanyCustomListAdapter extends ArrayAdapter<String> {
 		textView2.setTextSize(20);
 		textView2.setTypeface(null, Typeface.BOLD);
 		textView2.setText("$" + this.companyList.get(position).getCompanyStockPrice());
-		Drawable draw = context.getResources().getDrawable(this.companyList.get(position).getCompanyIcon());
+		//Drawable draw = context.getResources().getDrawable(this.companyList.get(position).getCompanyIcon());
+		Drawable draw = getImage(this.companyList.get(position).getCompanyIcon());
 		Bitmap bitmap = ((BitmapDrawable) draw).getBitmap();
 		int h = bitmap.getHeight();
 		int w = bitmap.getWidth();

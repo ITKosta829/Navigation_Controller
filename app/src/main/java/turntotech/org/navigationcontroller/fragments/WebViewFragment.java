@@ -25,12 +25,16 @@ public class WebViewFragment extends Fragment {
     String companyTitle;
     String productTitle;
 
+    DataHandler dataHandler;
+
     public WebViewFragment() {
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        dataHandler = DataHandler.getInstance();
 
         View mCustomView = inflater.inflate(R.layout.custom_actionbar, null);
         TextView title = (TextView) mCustomView.findViewById(R.id.title_text);
@@ -45,17 +49,17 @@ public class WebViewFragment extends Fragment {
         actionBar.setCustomView(mCustomView);
         actionBar.setDisplayShowCustomEnabled(true);
 
-        companyPosition = DataHandler.getInstance().currentCompanyPosition;
-        productPosition = DataHandler.getInstance().currentProductPosition;
-        companyTitle = DataHandler.getInstance().currentCompanyTitle;
-        productTitle = DataHandler.getInstance().currentProductTitle;
+        companyPosition = dataHandler.currentCompanyPosition;
+        productPosition = dataHandler.currentProductPosition;
+        companyTitle = dataHandler.currentCompanyTitle;
+        productTitle = dataHandler.currentProductTitle;
 
         title.setText(productTitle + " Web Page");
 
         View view = inflater.inflate(R.layout.web_view, container, false);
         WebView webView = (WebView) view.findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(DataHandler.getInstance().getCompanyProductURL(companyPosition, productPosition));
+        webView.loadUrl(dataHandler.getCompanyProductURL(companyPosition, productPosition));
 
         return view;
     }

@@ -1,10 +1,9 @@
 package turntotech.org.navigationcontroller;
 
-//import android.support.v4.app.FragmentTransaction;
 import android.app.FragmentTransaction;
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import turntotech.org.navigationcontroller.fragments.CompanyFragment;
 
@@ -13,6 +12,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DatabaseAccess.getInstance(this);
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
