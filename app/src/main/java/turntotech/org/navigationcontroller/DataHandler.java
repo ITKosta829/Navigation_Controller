@@ -2,8 +2,11 @@ package turntotech.org.navigationcontroller;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import org.json.JSONArray;
@@ -61,6 +64,12 @@ public class DataHandler implements DataHandlerINT {
     }
 
     @Override
+    public void addCompany(int id, String name, String logo, String stockName) {
+        Company company = new Company(id, name, logo, stockName);
+        companyList.add(company);
+    }
+
+    @Override
     public void deleteCompany(int index) {
         companyList.remove(index);
 
@@ -96,6 +105,11 @@ public class DataHandler implements DataHandlerINT {
     }
 
     @Override
+    public void addProduct(int companyIndex, String name, String logo, String url) {
+        companyList.get(companyIndex).addProducts(companyIndex, name, logo, url);
+    }
+
+    @Override
     public String getCompanyProductURL(int companyIndex, int productIndex) {
         return companyList.get(companyIndex).getProducts().get(productIndex).getProductURL();
 
@@ -117,11 +131,9 @@ public class DataHandler implements DataHandlerINT {
     }
 
     private DataHandler() {
+        DBA = DatabaseAccess.getInstance();
         new convertUSDtoKRW().execute(USDtoKRW);
         companyList = new ArrayList<>();
-        companiesAndProducts();
-        DBA = DatabaseAccess.getInstance();
-        getDatabaseData();
 
     }
 
@@ -233,7 +245,7 @@ public class DataHandler implements DataHandlerINT {
                     }
                     in.close();
 
-                    System.out.println("" + sb.toString());
+                    //System.out.println("" + sb.toString());
                     return sb.toString();
 
                 } else {
@@ -290,91 +302,9 @@ public class DataHandler implements DataHandlerINT {
     }
 
     public void getDatabaseData() {
-
         DBA.open();
         DBA.getTestData();
-
-        new updateDatabaseFinanceData().execute(url + DBA.getCompanyStockNames());
-
-    }
-
-    private class updateDatabaseFinanceData extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            StringBuilder sb = new StringBuilder();
-
-            HttpURLConnection urlConnection = null;
-            try {
-                URL url = new URL(params[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setUseCaches(false);
-                urlConnection.setConnectTimeout(10000);
-                urlConnection.setReadTimeout(10000);
-                urlConnection.connect();
-
-                int HttpResult = urlConnection.getResponseCode();
-                if (HttpResult == HttpURLConnection.HTTP_OK) {
-                    BufferedReader in = new BufferedReader(new InputStreamReader(
-                            urlConnection.getInputStream(), "utf-8"));
-                    String line;
-                    while ((line = in.readLine()) != null) {
-                        sb.append(line + "\n");
-                    }
-                    in.close();
-
-                    System.out.println("" + sb.toString());
-                    return sb.toString();
-
-                } else {
-                    System.out.println(urlConnection.getResponseMessage());
-                }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (urlConnection != null)
-                    urlConnection.disconnect();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            try {
-                result = result.substring(3);
-
-                JSONArray jarray = new JSONArray(result);
-                String stockPrice;
-                String exchange;
-
-                for (int i = 0; i < DBA.howManyCompanies(); i++) {
-
-                    JSONObject json = jarray.getJSONObject(i);
-                    stockPrice = json.getString("l");
-                    exchange = json.getString("e");
-
-                    if (exchange.equals("KRX")) {
-                        stockPrice = stockPrice.replaceAll("[^\\d.]+", "");
-                        Double d = Double.parseDouble(stockPrice);
-                        d = d / valueOfKRW;
-                        NumberFormat nf = NumberFormat.getCurrencyInstance();
-                        stockPrice = nf.format(d);
-                        stockPrice = stockPrice.substring(1);
-                    }
-                    DBA.updateCompanyStockPrice(stockPrice, i + 1);
-                }
-
-                adapter.notifyDataSetChanged();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        DBA.populateCompanyList();
 
     }
 
@@ -441,6 +371,7 @@ public class DataHandler implements DataHandlerINT {
         }
 
     }
+
 
 
 }

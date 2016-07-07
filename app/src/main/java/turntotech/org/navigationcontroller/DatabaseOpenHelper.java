@@ -31,7 +31,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         DB_PATH = context.getApplicationInfo().dataDir + "/";
 
         try {
-            copyDataBase();
+            createDataBase();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,6 +63,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     //Copy the database from assets
     private void copyDataBase() throws IOException {
+        Log.d(TAG, "copyDataBase: copyDatabase Called");
         InputStream mInput = mContext.getAssets().open(DB_NAME);
         String outFileName = DB_PATH + DB_NAME;
         OutputStream mOutput = new FileOutputStream(outFileName);

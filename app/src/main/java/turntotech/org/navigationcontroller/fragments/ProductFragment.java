@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 
 import turntotech.org.navigationcontroller.CompanyCustomListAdapter;
+import turntotech.org.navigationcontroller.DatabaseAccess;
 import turntotech.org.navigationcontroller.ProductCustomListAdapter;
 import turntotech.org.navigationcontroller.DataHandler;
 import turntotech.org.navigationcontroller.R;
@@ -42,15 +43,15 @@ public class ProductFragment extends ListFragment {
     int companyPosition;
     String companyTitle, productTitle;
 
-    DataHandler dataHandler;
+    DataHandler DH;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        dataHandler = DataHandler.getInstance();
+        DH = DataHandler.getInstance();
 
-        companyPosition = dataHandler.currentCompanyPosition;
-        companyTitle = dataHandler.currentCompanyTitle;
+        companyPosition = DH.currentCompanyPosition;
+        companyTitle = DH.currentCompanyTitle;
 
         View mCustomView = inflater.inflate(R.layout.custom_actionbar, null);
         TextView title = (TextView) mCustomView.findViewById(R.id.title_text);
@@ -79,7 +80,7 @@ public class ProductFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ListView listView = (ListView) view.findViewById(android.R.id.list);
 
-        setListAdapter(new ProductCustomListAdapter(getActivity(), dataHandler.getAllCompanies().get(companyPosition).getProducts()));
+        setListAdapter(new ProductCustomListAdapter(getActivity(), DH.getAllCompanies().get(companyPosition).getProducts()));
 
         registerForContextMenu(listView);
 
@@ -89,9 +90,9 @@ public class ProductFragment extends ListFragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 productTitle = (String) ((TextView) view.findViewById(R.id.txtStatus)).getText();
-                dataHandler.currentProductTitle = productTitle;
+                DH.currentProductTitle = productTitle;
                 Log.d("Long Click", "Product Position: " + position);
-                dataHandler.currentProductPosition = position;
+                DH.currentProductPosition = position;
 
                 return false;
             }
@@ -106,8 +107,8 @@ public class ProductFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
 
         productTitle = (String) ((TextView) v.findViewById(R.id.txtStatus)).getText();
-        dataHandler.currentProductTitle = productTitle;
-        dataHandler.currentProductPosition = position;
+        DH.currentProductTitle = productTitle;
+        DH.currentProductPosition = position;
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.addToBackStack(null);
@@ -144,8 +145,9 @@ public class ProductFragment extends ListFragment {
             adb.setPositiveButton("Yes", new AlertDialog.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
 
-                    dataHandler.getAllCompanies().get(companyPosition).deleteProduct(dataHandler.currentProductPosition);
-                    setListAdapter(new CompanyCustomListAdapter(getActivity(), dataHandler.getAllCompanies()));
+                    //DH.getAllCompanies().get(companyPosition).deleteProduct(DH.currentProductPosition);
+                    DatabaseAccess.getInstance().deleteCompanyProduct();
+                    setListAdapter(new CompanyCustomListAdapter(getActivity(), DH.getAllCompanies()));
                 }
             });
             adb.show();

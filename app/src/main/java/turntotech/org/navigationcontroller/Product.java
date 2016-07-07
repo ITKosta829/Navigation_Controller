@@ -5,6 +5,7 @@ package turntotech.org.navigationcontroller;
  */
 public class Product {
 
+    private int product_id;
     private String productName;
     private String productIcon;
     private String url;
@@ -12,6 +13,20 @@ public class Product {
     public Product (String name, String icon){
         this.productName = name;
         this.productIcon = icon;
+    }
+
+    public Product (String name, String icon, String url){
+        this(name, icon);
+        this.url = url;
+    }
+
+    public Product (int id, String name, String icon, String url){
+        this(name, icon, url);
+        this.product_id = id;
+    }
+
+    public int getProduct_ID(){
+        return product_id;
     }
 
     public String getProductName() {

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import turntotech.org.navigationcontroller.DataHandler;
+import turntotech.org.navigationcontroller.DatabaseAccess;
 import turntotech.org.navigationcontroller.R;
 
 /**
@@ -37,8 +38,9 @@ public class EditProductForm extends android.app.DialogFragment {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 new_product_name = et.getText().toString();
-                                DataHandler.getInstance().editCompanyProduct(DataHandler.getInstance().currentCompanyPosition,
-                                        DataHandler.getInstance().currentProductPosition, new_product_name);
+                                DatabaseAccess.getInstance().editCompanyProduct(new_product_name);
+//                                DataHandler.getInstance().editCompanyProduct(DataHandler.getInstance().currentCompanyPosition,
+//                                        DataHandler.getInstance().currentProductPosition, new_product_name);
                             }
                         }
                 )

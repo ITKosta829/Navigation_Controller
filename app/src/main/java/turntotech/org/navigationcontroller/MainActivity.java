@@ -9,6 +9,8 @@ import turntotech.org.navigationcontroller.fragments.CompanyFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "company";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, new CompanyFragment()).commit();
+        fragmentTransaction.add(R.id.fragment_container, new CompanyFragment(), TAG).commit();
 
     }
 }

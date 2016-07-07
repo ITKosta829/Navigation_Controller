@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import turntotech.org.navigationcontroller.DataHandler;
+import turntotech.org.navigationcontroller.DatabaseAccess;
 import turntotech.org.navigationcontroller.R;
 
 /**
@@ -44,9 +45,10 @@ public class AddProductForm extends android.app.DialogFragment {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 new_product_name = et.getText().toString();
-                                DataHandler.getInstance().addProduct(companyPosition, new_product_name, "unknown_logo");
+                                DatabaseAccess.getInstance().addCompanyProduct(new_product_name);
+                                //DataHandler.getInstance().addProduct(companyPosition, new_product_name, "unknown_logo");
                                 DataHandler.getInstance().adapter.notifyDataSetChanged();
-                                ListFragment f =  (ListFragment) getActivity().getFragmentManager().findFragmentByTag("prod");
+                                ListFragment f =  (ListFragment) getActivity().getFragmentManager().findFragmentByTag("product");
                                 ArrayAdapter a =  (ArrayAdapter)f.getListAdapter();
                                 a.notifyDataSetChanged();
                             }

@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class Company {
 
+    private int company_ID;
     private String companyName;
     private String companyIcon;
     private String companyStockName;
@@ -23,6 +24,15 @@ public class Company {
     public Company (String name, String icon, String stockName){
         this(name, icon);
         this.companyStockName = stockName;
+    }
+
+    public Company (int id, String name, String icon, String stockName){
+        this(name, icon, stockName);
+        this.company_ID = id;
+    }
+
+    public int getCompany_ID(){
+        return company_ID;
     }
 
     public String getCompanyName() {
@@ -66,9 +76,16 @@ public class Company {
         productList.add(product);
     }
 
+    public void addProducts(int id, String name, String logo, String url){
+        Product product = new Product(id, name, logo, url);
+        productList.add(product);
+    }
+
     public void deleteProduct(int index) {
         productList.remove(index);
 
     }
+
+
 
 }
