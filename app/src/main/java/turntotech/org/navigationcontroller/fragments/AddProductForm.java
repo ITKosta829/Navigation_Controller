@@ -47,7 +47,7 @@ public class AddProductForm extends android.app.DialogFragment {
                                 new_product_name = et.getText().toString();
                                 DatabaseAccess.getInstance().addCompanyProduct(new_product_name);
                                 //DataHandler.getInstance().addProduct(companyPosition, new_product_name, "unknown_logo");
-                                DataHandler.getInstance().adapter.notifyDataSetChanged();
+                                //DataHandler.getInstance().adapter.notifyDataSetChanged();
                                 ListFragment f =  (ListFragment) getActivity().getFragmentManager().findFragmentByTag("product");
                                 ArrayAdapter a =  (ArrayAdapter)f.getListAdapter();
                                 a.notifyDataSetChanged();

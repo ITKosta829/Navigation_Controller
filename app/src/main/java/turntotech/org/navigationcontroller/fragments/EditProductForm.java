@@ -1,12 +1,14 @@
 package turntotech.org.navigationcontroller.fragments;
 
 import android.app.Dialog;
+import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import turntotech.org.navigationcontroller.DataHandler;
@@ -40,7 +42,10 @@ public class EditProductForm extends android.app.DialogFragment {
                                 new_product_name = et.getText().toString();
                                 DatabaseAccess.getInstance().editCompanyProduct(new_product_name);
 //                                DataHandler.getInstance().editCompanyProduct(DataHandler.getInstance().currentCompanyPosition,
-//                                        DataHandler.getInstance().currentProductPosition, new_product_name);
+//                                DataHandler.getInstance().currentProductPosition, new_product_name);
+                                ListFragment f =  (ListFragment) getActivity().getFragmentManager().findFragmentByTag("product");
+                                ArrayAdapter a =  (ArrayAdapter)f.getListAdapter();
+                                a.notifyDataSetChanged();
                             }
                         }
                 )

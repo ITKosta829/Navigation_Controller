@@ -1,6 +1,7 @@
 package turntotech.org.navigationcontroller.fragments;
 
 import android.app.Dialog;
+import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class AddCompanyForm extends android.app.DialogFragment {
 
     private EditText C, E, T;
     String company_name, exchange, ticker_symbol;
+    CompanyFragment CF;
 
     @NonNull
     @Override
@@ -53,10 +55,13 @@ public class AddCompanyForm extends android.app.DialogFragment {
                                 //DataHandler.getInstance().addCompany(company_name, "unknown_logo", exchange + ":" + ticker_symbol);
                                 DatabaseAccess.getInstance().addCompany(company_name, exchange + ":" + ticker_symbol);
                                 DataHandler.getInstance().financeQuery();
+
+                                //CF.adapter.notifyDataSetChanged();
+
                                 DataHandler.getInstance().adapter.notifyDataSetChanged();
-                                ListFragment f =  (ListFragment) getActivity().getFragmentManager().findFragmentByTag("company");
-                                ArrayAdapter a =  (ArrayAdapter)f.getListAdapter();
-                                a.notifyDataSetChanged();
+//                                Fragment f =  getActivity().getFragmentManager().findFragmentByTag("company");
+//                                ArrayAdapter a =  (ArrayAdapter)f.getA();
+//                                a.notifyDataSetChanged();
                             }
                         }
                 )

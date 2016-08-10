@@ -18,14 +18,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
-import turntotech.org.navigationcontroller.CompanyCustomListAdapter;
+import turntotech.org.navigationcontroller.CompanyViewAdapter;
 import turntotech.org.navigationcontroller.DatabaseAccess;
-import turntotech.org.navigationcontroller.ProductCustomListAdapter;
+import turntotech.org.navigationcontroller.ProductViewAdapter;
 import turntotech.org.navigationcontroller.DataHandler;
 import turntotech.org.navigationcontroller.R;
 
@@ -80,7 +75,7 @@ public class ProductFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ListView listView = (ListView) view.findViewById(android.R.id.list);
 
-        setListAdapter(new ProductCustomListAdapter(getActivity(), DH.getAllCompanies().get(companyPosition).getProducts()));
+        setListAdapter(new ProductViewAdapter(getActivity(), DH.getAllCompanies().get(companyPosition).getProducts()));
 
         registerForContextMenu(listView);
 
@@ -147,7 +142,7 @@ public class ProductFragment extends ListFragment {
 
                     //DH.getAllCompanies().get(companyPosition).deleteProduct(DH.currentProductPosition);
                     DatabaseAccess.getInstance().deleteCompanyProduct();
-                    setListAdapter(new CompanyCustomListAdapter(getActivity(), DH.getAllCompanies()));
+                    setListAdapter(new CompanyViewAdapter(getActivity(), DH.getAllCompanies()));
                 }
             });
             adb.show();

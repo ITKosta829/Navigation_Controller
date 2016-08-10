@@ -22,6 +22,7 @@ public class EditCompanyForm extends android.app.DialogFragment {
 
     private EditText et;
     String new_company_name;
+    CompanyFragment CF;
 
     @NonNull
     @Override
@@ -42,10 +43,11 @@ public class EditCompanyForm extends android.app.DialogFragment {
                                 new_company_name = et.getText().toString();
                                 //DataHandler.getInstance().editCompany(DataHandler.getInstance().currentCompanyPosition, new_company_name);
                                 DatabaseAccess.getInstance().editCompanyName(new_company_name);
+//                                CF.adapter.notifyDataSetChanged();
                                 DataHandler.getInstance().adapter.notifyDataSetChanged();
-                                ListFragment f =  (ListFragment) getActivity().getFragmentManager().findFragmentByTag("company");
-                                ArrayAdapter a =  (ArrayAdapter)f.getListAdapter();
-                                a.notifyDataSetChanged();
+//                                ListFragment f =  (ListFragment) getActivity().getFragmentManager().findFragmentByTag("company");
+//                                ArrayAdapter a =  (ArrayAdapter)f.getListAdapter();
+//                                a.notifyDataSetChanged();
                             }
                         }
                 )

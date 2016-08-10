@@ -1,41 +1,37 @@
 package turntotech.org.navigationcontroller.fragments;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ListFragment;
 import android.content.DialogInterface;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.TextView;
 
-import turntotech.org.navigationcontroller.CompanyCustomListAdapter;
+import turntotech.org.navigationcontroller.CompanyViewAdapter;
 import turntotech.org.navigationcontroller.DataHandler;
 import turntotech.org.navigationcontroller.DatabaseAccess;
 import turntotech.org.navigationcontroller.R;
 
 
-public class CompanyFragment extends ListFragment {
+public class CompanyFragment extends Fragment {
 
     private static final String TAG_PRODUCT_FRAG = "product";
 
     ProductFragment productFragment;
     String companyTitle;
     AddCompanyForm addCompanyForm;
+    CompanyViewAdapter adapter;
 
     DataHandler DH;
 
@@ -70,15 +66,33 @@ public class CompanyFragment extends ListFragment {
         DH.getDatabaseData();
         DH.financeQuery();
 
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_grid, container, false);
 
-        ListView listView = (ListView) view.findViewById(android.R.id.list);
+        GridView gridView = (GridView) view.findViewById(R.id.grid);
 
-        setListAdapter(new CompanyCustomListAdapter(getActivity(), DH.getAllCompanies()));
+        adapter = new CompanyViewAdapter(getActivity(), DH.getAllCompanies());
 
-        registerForContextMenu(listView);
+        gridView.setAdapter(adapter);
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        registerForContextMenu(gridView);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                companyTitle = (String) ((TextView) view.findViewById(R.id.txtStatus)).getText();
+                DH.currentCompanyTitle = companyTitle;
+                DH.currentCompanyPosition = position;
+
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.addToBackStack(null);
+                transaction.replace(R.id.fragment_container, productFragment, TAG_PRODUCT_FRAG);
+                transaction.commit();
+
+            }
+        });
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -92,24 +106,9 @@ public class CompanyFragment extends ListFragment {
             }
         });
 
-        DH.adapter = (ArrayAdapter) getListAdapter();
+        DH.adapter = this.adapter;
 
         return view;
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        // TODO Auto-generated method stub
-        super.onListItemClick(l, v, position, id);
-
-        companyTitle = (String) ((TextView) v.findViewById(R.id.txtStatus)).getText();
-        DH.currentCompanyTitle = companyTitle;
-        DH.currentCompanyPosition = position;
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.fragment_container, productFragment,TAG_PRODUCT_FRAG);
-        transaction.commit();
     }
 
     @Override
@@ -141,10 +140,10 @@ public class CompanyFragment extends ListFragment {
             adb.setPositiveButton("Yes", new AlertDialog.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
 
-                    //DH.deleteCompany(DH.currentCompanyPosition);
                     DatabaseAccess.getInstance().deleteCompany();
 
-                    setListAdapter(new CompanyCustomListAdapter(getActivity(), DH.getAllCompanies()));
+                    //adapter = new CompanyViewAdapter(getActivity(), DH.getAllCompanies());
+                    adapter.notifyDataSetChanged();
                 }
             });
             adb.show();

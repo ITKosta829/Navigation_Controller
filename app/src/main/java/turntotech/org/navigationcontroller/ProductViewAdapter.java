@@ -17,14 +17,14 @@ import java.util.List;
 /**
  * Created by DeanC on 6/7/2016.
  */
-public class ProductCustomListAdapter extends ArrayAdapter<String> {
+public class ProductViewAdapter extends ArrayAdapter<String> {
 
     private final Context context;
 //    private final String[] values;
 //    private final Integer[] icons;
     private List<Product> productList;
 
-    public ProductCustomListAdapter(Context context, String[] values, Integer[] icons) {
+    public ProductViewAdapter(Context context, String[] values, Integer[] icons) {
         super(context, R.layout.row_layout, values);
         this.context = context;
 //        this.values = values;
@@ -32,7 +32,7 @@ public class ProductCustomListAdapter extends ArrayAdapter<String> {
         //this.productList = productList;
 
     }
-    public ProductCustomListAdapter(Context context, List productList) {
+    public ProductViewAdapter(Context context, List productList) {
         super(context, R.layout.row_layout, productList);
         this.context = context;
 //        this.values = values;

@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by DeanC on 6/27/2016.
@@ -162,24 +160,24 @@ public class DatabaseAccess {
         }
     }
 
-//    public void updateCompanyStockPrice(String price, int id) {
-//
-//        String s1 = "UPDATE Company SET company_stock_price = ";
-//        String s2 = " WHERE _id = ";
-//        String s3 = String.valueOf(id);
-//
-//        database.execSQL(s1 + price + s2 + s3);
-//    }
+    public void updateCompanyStockPrice(String price, int id) {
 
-    public int howManyCompanies() {
+        String s1 = "UPDATE Company SET company_stock_price = ";
+        String s2 = " WHERE _id = ";
+        String s3 = String.valueOf(id);
 
-        String sql = "SELECT COUNT(_id) FROM Company";
-        String result = "";
-        Cursor mCur = database.rawQuery(sql, null);
-        result = mCur.getString(0);
-
-        return Integer.parseInt(result);
+        database.execSQL(s1 + price + s2 + s3);
     }
+
+//    public int howManyCompanies() {
+//
+//        String sql = "SELECT COUNT(_id) FROM Company";
+//        String result = "";
+//        Cursor mCur = database.rawQuery(sql, null);
+//        result = mCur.getString(0);
+//
+//        return Integer.parseInt(result);
+//    }
 
     public void addCompany(String name, String stock_name) {
 
